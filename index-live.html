@@ -40,20 +40,19 @@ h1,h2{}
 a {color:white;}
 canvas {border: 3px solid #333; border-radius: 4px;}
 </style>
-   
-   <script>
-      if (!window.console) {
-         window.console = {log: function() {}};
-      }
-      var $g = {};
-      $g.resourceBaseHref = './';
-      $g.ajaxBaseHref = './json/';
-   </script>
-   <script src="./javascript/main.js?rnd="></script>
-	
+
+<script>
+   if (!window.console) {
+      window.console = {log: function() {}};
+   }
+   var $g = {};
+   $g.resourceBaseHref = './';
+   $g.ajaxBaseHref = './json/';
+</script>
+<script src="./javascript/main.js?rnd=<% random %>"></script>
+
 </head>
 <body>
-   
    <div>
       <h1>HTML5 Space Fighter</h1>
       <div id="game-header">

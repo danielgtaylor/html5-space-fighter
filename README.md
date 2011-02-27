@@ -11,9 +11,29 @@ Live Version
 Development
 -----------
 
-In order to develop please download GameJS first, then clone this repository
-into e.g. 'gamejs/examples/fighter'. When running the GameJS development server
-you will now see the game listed and playable.
+In order to develop please download [GameJS](http://gamejs.org/) first, then
+clone this repository into e.g. `gamejs/examples/html5-space-fighter`. When
+running the GameJS development server you will now see the game listed and
+playable. For example:
+
+    cd gamejs/examples
+    git clone git://github.com/danielgtaylor/html5-space-fighter.git
+    cd ..
+    ./gjs-server.sh
+
+Then go to [localhost:8080](http://localhost:8080/)
+
+Deployment
+----------
+
+You can deploy the game as follows, assuming an installation like the steps
+given above:
+
+    cd gamejs
+    ./gjs-statify.sh examples/html5-space-fighter ~/Desktop/fighter-static
+
+Then you can upload the `fighter-static` folder on your desktop to a web server
+to make it publicly accessible.
 
 License
 -------

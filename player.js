@@ -66,6 +66,7 @@ var Ship = function(rect, size, enemies) {
       }
    ];
    this.weaponStage = 0;
+   this.clearAllEnemies = 0;
    this.damaged = 0;
    
    this.clipMotion = function () {
@@ -122,6 +123,8 @@ var Ship = function(rect, size, enemies) {
                'nextFire': 0
             }
          ];
+      } else {
+         this.clearAllEnemies = 150;
       }
    };
    

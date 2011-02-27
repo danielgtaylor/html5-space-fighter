@@ -101,6 +101,14 @@ function main() {
                ship.damaged = Math.max(0, ship.damaged - msDuration);
             }
             
+            if (ship.clearAllEnemies) {
+               if (ship.clearAllEnemies == 150) {
+                  ai.weapons.empty();
+               }
+               gamejs.draw.rect(mainSurface, "rgba(255, 255, 255, " + (ship.clearAllEnemies / 150) + ")", new gamejs.Rect([0, 0], SIZE), 0)
+               ship.clearAllEnemies = Math.max(0, ship.clearAllEnemies - msDuration);
+            }
+            
             ai.draw(mainSurface);
          } else {
             gamejs.draw.rect(mainSurface, "rgba(255, 0, 0, 0.5)", new gamejs.Rect([0, 0], SIZE), 0)

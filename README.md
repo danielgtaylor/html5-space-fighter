@@ -6,7 +6,7 @@ An HTML5 game written using GameJS.
 Live Version
 ------------
 
-You can play the game at http://programmer-art.org/dropbox/fighter-static/index.html
+[Play the game online](http://programmer-art.org/dropbox/fighter-static/index.html "Click here to play!")
 
 Development
 -----------

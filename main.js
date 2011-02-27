@@ -116,7 +116,7 @@ function main() {
    var collisionTick = function (msDuration) {
       var collisions;
       
-      if (controls.paused) {
+      if (controls.paused || ship.isDead()) {
          return;
       }
       

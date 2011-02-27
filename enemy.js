@@ -380,7 +380,7 @@ var AiManager = function (size, player) {
          ]
       },
    ];
-   this.level = 9;
+   this.level = 0;
    this.levelDuration = this.levels[this.level].duration;
    
    this.update = function (msDuration) {

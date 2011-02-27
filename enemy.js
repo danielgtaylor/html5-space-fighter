@@ -1,20 +1,25 @@
 var gamejs = require('gamejs');
 
-var Pulse = function (pos, speed, angle, player, strength) {
+var Pulse = function (pos, speed, angle, player, size, strength) {
    Pulse.superConstructor.apply(this, arguments);
    this.player = player;
-   this.rect = new gamejs.Rect([pos[0] - 1, pos[1] - 1], [3, 3]);
+   this.rect = new gamejs.Rect([pos[0] - 4, pos[1] - 4], [8, 8]);
    this.speed = speed;
    this.angle = angle;
    this.strength = strength;
+   this.size = size;
    
    this.update = function (msDuration) {
       this.rect.left += Math.cos(this.angle) * speed * (msDuration / 1000);
       this.rect.top += Math.sin(this.angle) * speed * (msDuration / 1000);
+      
+      if ((this.rect.left <= -this.rect.width) || (this.rect.left >= this.size[0]) || (this.rect.top <= -this.rect.height) || (this.rect.top >= this.size[1])) {
+         this.kill();
+      }
    };
    
    this.draw = function (surface) {
-      gamejs.draw.circle(surface, "#f00", [this.rect.left, this.rect.top], 3, 2);
+      gamejs.draw.circle(surface, "#f00", [this.rect.left + 4, this.rect.top + 4], 3, 2);
    };
    
    return this;
@@ -76,6 +81,7 @@ gamejs.utils.objects.extend(Asteroid, Enemy);
 var Scout = function (images, size, player, weapons) {
    Scout.superConstructor.apply(this, arguments);
    this.player = player;
+   this.images = images;
    this.image = images.scout;
    this.rect = new gamejs.Rect([50 + (Math.random() * (size[0] - 100)), -50], this.image.getSize());
    this.size = size;
@@ -89,7 +95,7 @@ var Scout = function (images, size, player, weapons) {
    this.update = function (msDuration) {
       this.nextFire -= msDuration;
       while (this.nextFire < 0) {
-         this.weapons.add(new Pulse([this.rect.left + (this.rect.width / 2), this.rect.top + this.rect.height], 100, Math.PI * 0.5, this.player, 10));
+         this.weapons.add(new Pulse([this.rect.left + (this.rect.width / 2), this.rect.top + this.rect.height], 100, Math.PI * 0.5, this.player, this.size, 10));
          this.nextFire += this.fireRate;
       }
    
@@ -107,6 +113,7 @@ gamejs.utils.objects.extend(Scout, Enemy);
 var Drone = function (images, size, player, weapons) {
    Drone.superConstructor.apply(this, arguments);
    this.player = player;
+   this.images = images;
    this.image = images.drone;
    this.rect = new gamejs.Rect([50 + (Math.random() * (size[0] - 100)), -50], this.image.getSize());
    this.size = size;
@@ -121,7 +128,7 @@ var Drone = function (images, size, player, weapons) {
       this.nextFire -= msDuration;
       while (this.nextFire < 0) {
          var angle = Math.PI - Math.atan2((this.player.rect.left + (this.player.rect.width / 2)) - this.rect.left, (this.player.rect.top + (this.player.rect.height / 2)) - this.rect.top) - (Math.PI / 2);
-         this.weapons.add(new Pulse([this.rect.left + (this.rect.width / 2), this.rect.top + this.rect.height], 100, angle, this.player, 20));
+         this.weapons.add(new Pulse([this.rect.left + (this.rect.width / 2), this.rect.top + this.rect.height], 100, angle, this.player, this.size, 20));
          this.nextFire += this.fireRate;
       }
    
@@ -139,6 +146,7 @@ gamejs.utils.objects.extend(Drone, Enemy);
 var HeavyDrone = function (images, size, player, weapons) {
    HeavyDrone.superConstructor.apply(this, arguments);
    this.player = player;
+   this.images = images;
    this.image = images.heavyDrone;
    this.rect = new gamejs.Rect([50 + (Math.random() * (size[0] - 100)), -50], this.image.getSize());
    this.size = size;
@@ -153,7 +161,7 @@ var HeavyDrone = function (images, size, player, weapons) {
       this.nextFire -= msDuration;
       while (this.nextFire < 0) {
          var angle = Math.PI - Math.atan2((this.player.rect.left + (this.player.rect.width / 2)) - this.rect.left, (this.player.rect.top + (this.player.rect.height / 2)) - this.rect.top) - (Math.PI / 2);
-         this.weapons.add(new Pulse([this.rect.left + (this.rect.width / 2), this.rect.top + this.rect.height], 300, angle, this.player, 40));
+         this.weapons.add(new Pulse([this.rect.left + (this.rect.width / 2), this.rect.top + this.rect.height], 300, angle, this.player, this.size, 40));
          this.nextFire += this.fireRate;
       }
    
@@ -171,6 +179,7 @@ gamejs.utils.objects.extend(HeavyDrone, Enemy);
 var Porcupine = function (images, size, player, weapons) {
    Porcupine.superConstructor.apply(this, arguments);
    this.player = player;
+   this.images = images;
    this.image = images.porcupine;
    this.rect = new gamejs.Rect([50 + (Math.random() * (size[0] - 100)), -50], this.image.getSize());
    this.size = size;
@@ -180,7 +189,7 @@ var Porcupine = function (images, size, player, weapons) {
    this.strength = 30;
    this.health = 25;
    this.speed = 50;
-   this.alternate = false;
+   this.alternate = Math.random() < 0.5;
    
    this.update = function (msDuration) {
       this.nextFire -= msDuration;
@@ -196,7 +205,7 @@ var Porcupine = function (images, size, player, weapons) {
          this.alternate = !this.alternate;
          
          angles.forEach(function (angle) {
-            porcupine.weapons.add(new Pulse([porcupine.rect.left + (porcupine.rect.width / 2), porcupine.rect.top + porcupine.rect.height], 100, angle, porcupine.player, 5));
+            porcupine.weapons.add(new Pulse([porcupine.rect.left + (porcupine.rect.width / 2), porcupine.rect.top + porcupine.rect.height], 100, angle, porcupine.player, porcupine.size, 10));
          });
          
          this.nextFire += this.fireRate;
@@ -371,7 +380,7 @@ var AiManager = function (size, player) {
          ]
       },
    ];
-   this.level = 0;
+   this.level = 9;
    this.levelDuration = this.levels[this.level].duration;
    
    this.update = function (msDuration) {

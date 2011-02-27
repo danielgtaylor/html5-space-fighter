@@ -19,6 +19,8 @@ function main() {
    gamejs.display.setMode(SIZE);
    gamejs.display.setCaption("Fighter");
    
+   var intro = gamejs.image.load('images/intro.png');
+   
    var font = new gamejs.font.Font('48px ubuntu, sans-serif');
    var paused = font.render("Paused", "#08c");
    var gameOver = font.render("Game Over", "#000");
@@ -72,9 +74,9 @@ function main() {
             }
             
             starMap.update(msDuration);
-            powerups.update(msDuration);
             
-            if (!ship.isDead()) {
+            if (controls.initialClick && !ship.isDead()) {
+               powerups.update(msDuration);
                ship.update(msDuration);
                ship.clipMotion();
                
@@ -85,34 +87,38 @@ function main() {
          mainSurface.blit(background, [(SIZE[0] / 2) - (background.getSize()[0] / 2), backgroundPos]);
          
          starMap.draw(mainSurface);
-         powerups.draw(mainSurface);
          
-         if (!ship.isDead()) {
-            ship.angle = controls.angle();
-            ship.firing = controls.fire;
-            
-            ship.draw(mainSurface);
-            ship.weapons.forEach(function (weapon) {
-               weapon.draw(mainSurface)
-            });
-            
-            if (ship.damaged) {
-               gamejs.draw.rect(mainSurface, "rgba(255, 0, 0, " + (ship.damaged / 150) + ")", new gamejs.Rect([0, 0], SIZE), 0)
-               ship.damaged = Math.max(0, ship.damaged - msDuration);
-            }
-            
-            if (ship.clearAllEnemies) {
-               if (ship.clearAllEnemies == 150) {
-                  ai.weapons.empty();
+         if (controls.initialClick) {
+            if (!ship.isDead()) {
+               powerups.draw(mainSurface);
+               ship.angle = controls.angle();
+               ship.firing = controls.fire;
+               
+               ship.draw(mainSurface);
+               ship.weapons.forEach(function (weapon) {
+                  weapon.draw(mainSurface)
+               });
+               
+               if (ship.damaged) {
+                  gamejs.draw.rect(mainSurface, "rgba(255, 0, 0, " + (ship.damaged / 150) + ")", new gamejs.Rect([0, 0], SIZE), 0)
+                  ship.damaged = Math.max(0, ship.damaged - msDuration);
                }
-               gamejs.draw.rect(mainSurface, "rgba(255, 255, 255, " + (ship.clearAllEnemies / 150) + ")", new gamejs.Rect([0, 0], SIZE), 0)
-               ship.clearAllEnemies = Math.max(0, ship.clearAllEnemies - msDuration);
+               
+               if (ship.clearAllEnemies) {
+                  if (ship.clearAllEnemies == 150) {
+                     ai.weapons.empty();
+                  }
+                  gamejs.draw.rect(mainSurface, "rgba(255, 255, 255, " + (ship.clearAllEnemies / 150) + ")", new gamejs.Rect([0, 0], SIZE), 0)
+                  ship.clearAllEnemies = Math.max(0, ship.clearAllEnemies - msDuration);
+               }
+               
+               ai.draw(mainSurface);
+            } else {
+               gamejs.draw.rect(mainSurface, "rgba(255, 0, 0, 0.5)", new gamejs.Rect([0, 0], SIZE), 0)
+               mainSurface.blit(gameOver, [SIZE[0] / 2 - gameOver.getSize()[0] / 2, SIZE[1] / 2 - gameOver.getSize()[1] / 2]);
             }
-            
-            ai.draw(mainSurface);
          } else {
-            gamejs.draw.rect(mainSurface, "rgba(255, 0, 0, 0.5)", new gamejs.Rect([0, 0], SIZE), 0)
-            mainSurface.blit(gameOver, [SIZE[0] / 2 - gameOver.getSize()[0] / 2, SIZE[1] / 2 - gameOver.getSize()[1] / 2]);
+            mainSurface.blit(intro, [(SIZE[0] / 2) - (intro.getSize()[0] / 2), (SIZE[1] / 2) - (intro.getSize()[1] / 2)]);
          }
          
          hud.health = ship.health;
@@ -156,6 +162,7 @@ function main() {
  * M A I N
  */
 gamejs.preload([
+   'images/intro.png',
    'images/nebula1.jpg',
    'images/ship_1.png',
    'images/ship_2.png',

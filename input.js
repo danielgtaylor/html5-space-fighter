@@ -11,6 +11,7 @@ exports.UserControls = function(ship) {
    this.right = false;
    this.fire = false;
    this.paused = false;
+   this.initialClick = false;
    
    /*
       Handle events from the main loop to e.g. store which keys are currently
@@ -49,6 +50,8 @@ exports.UserControls = function(ship) {
          } else if (event.key === gamejs.event.K_SPACE) {
             this.fire = false;
          }
+      } else if (event.type === gamejs.event.MOUSE_DOWN) {
+         this.initialClick = true;
       }
    }
    

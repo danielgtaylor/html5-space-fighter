@@ -37,7 +37,7 @@ function main() {
    
    // create some ship sprites and put them in a group
    var ship = new player.Ship([SIZE[0] / 2 - 28, SIZE[1] - 100, 57, 26], SIZE, enemies);
-   var controls = new input.UserControls(ship);
+   var controls = new input.UserControls(SIZE, ship);
    
    var ai = new enemy.AiManager(SIZE, ship);
    enemies.push(ai.ships);

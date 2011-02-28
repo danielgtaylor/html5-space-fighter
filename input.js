@@ -3,7 +3,8 @@ var gamejs = require('gamejs');
 /*
    A class to allow the player to control her ship.
 */
-exports.UserControls = function(ship) {
+exports.UserControls = function(size, ship) {
+   this.size = size;
    this.ship = ship;
    this.up = false;
    this.down = false;
@@ -51,7 +52,9 @@ exports.UserControls = function(ship) {
             this.fire = false;
          }
       } else if (event.type === gamejs.event.MOUSE_DOWN) {
-         this.initialClick = true;
+         if ((event.pos[0] > 0 && event.pos[0] < this.size[0]) && (event.pos[1] > 0 && event.pos[1] < this.size[1])) {
+            this.initialClick = true;
+         }
       }
    }
    
